@@ -1,0 +1,375 @@
+.home-container {
+	position: relative;
+	min-height: 100vh;
+	width: 100%;
+}
+
+/* バブルセクション - バブル専用 */
+.bubble-section {
+	height: 100vh;
+	width: 100%;
+	padding: 2rem;
+	background: linear-gradient(to bottom, #dbeafe, #e9d5ff, #ffffff);
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+	/* CSS変数でバブルのサイズを管理 */
+	--bubble-sns-size: 80px;
+	--bubble-product-size: 120px;
+	--bubble-blog-size: 120px;
+	--bubble-padding: 2rem;
+}
+
+.bubble {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-weight: 600;
+	text-decoration: none;
+	color: white;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	position: absolute;
+	overflow: hidden;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	z-index: 2;
+	text-align: center;
+	padding: 0.5rem;
+	word-wrap: break-word;
+	line-height: 1.2;
+	transform: translate(-50%, -50%);
+	box-sizing: border-box;
+}
+
+.bubble::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.3);
+	transform: translate(-50%, -50%);
+	transition: width 0.6s, height 0.6s;
+}
+
+.bubble:hover::before {
+	width: 300px;
+	height: 300px;
+}
+
+.bubble:hover {
+	transform: translate(-50%, -50%) scale(1.1);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ドラッグ中のスタイル */
+.bubble.dragging {
+	z-index: 1000;
+	transition: none;
+	user-select: none;
+	pointer-events: none; /* ドラッグ中はリンクを無効化 */
+}
+
+.bubble.dragging:hover {
+	transform: translate(-50%, -50%) scale(1);
+}
+
+/* ドラッグ可能なことを示すカーソル */
+.bubble {
+	cursor: grab;
+}
+
+.bubble:active {
+	cursor: grabbing;
+}
+
+/* SNSバブル - 小さめ */
+.bubble-sns {
+	width: var(--bubble-sns-size);
+	height: var(--bubble-sns-size);
+	font-size: 0.875rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* プロダクトバブル */
+.bubble-product {
+	width: var(--bubble-product-size);
+	height: var(--bubble-product-size);
+	font-size: 1rem;
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* ブログバブル */
+.bubble-blog {
+	width: var(--bubble-blog-size);
+	height: var(--bubble-blog-size);
+	font-size: 0.9rem;
+	background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* セクション共通スタイル */
+.section-content {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 4rem 2rem;
+}
+
+.section-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	color: #1e293b;
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.section-link {
+	display: inline-block;
+	margin-top: 2rem;
+	color: #667eea;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 1.125rem;
+	transition: color 0.3s;
+	text-align: center;
+	width: 100%;
+}
+
+.section-link:hover {
+	color: #764ba2;
+}
+
+/* プロフィールセクション */
+.profile-section {
+	background: #ffffff;
+	padding: 4rem 0;
+}
+
+.profile-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+	background: #f8fafc;
+	border-radius: 1rem;
+	padding: 3rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.profile-avatar {
+	margin-bottom: 1rem;
+}
+
+.avatar-placeholder {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 3rem;
+	font-weight: 700;
+	box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.profile-info {
+	text-align: center;
+	max-width: 600px;
+}
+
+.profile-name {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #1e293b;
+	margin-bottom: 1rem;
+}
+
+.profile-bio {
+	font-size: 1.125rem;
+	line-height: 1.8;
+	color: #64748b;
+	margin-bottom: 1.5rem;
+}
+
+.profile-link {
+	display: inline-block;
+	color: #667eea;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 1.125rem;
+	transition: color 0.3s;
+}
+
+.profile-link:hover {
+	color: #764ba2;
+}
+
+/* ブログセクション */
+.blog-section {
+	background: #f8fafc;
+	padding: 4rem 0;
+}
+
+.blog-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 2rem;
+	margin-bottom: 2rem;
+}
+
+.blog-card {
+	background: white;
+	border-radius: 1rem;
+	padding: 2rem;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.blog-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.blog-date {
+	font-size: 0.875rem;
+	color: #94a3b8;
+	font-weight: 500;
+}
+
+.blog-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #1e293b;
+	margin: 0;
+}
+
+.blog-excerpt {
+	font-size: 1rem;
+	line-height: 1.6;
+	color: #64748b;
+	margin: 0;
+}
+
+/* プロダクトセクション */
+.product-section {
+	background: #ffffff;
+	padding: 4rem 0;
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 2rem;
+	margin-bottom: 2rem;
+}
+
+.product-card {
+	background: #f8fafc;
+	border-radius: 1rem;
+	padding: 2rem;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.product-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-empty {
+	cursor: default;
+}
+
+.product-card-empty:hover {
+	transform: none;
+}
+
+.product-placeholder {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #64748b;
+	text-align: center;
+}
+
+/* アニメーション */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+	.bubble-section {
+		padding: 1rem;
+		--bubble-sns-size: 70px;
+		--bubble-product-size: 100px;
+		--bubble-blog-size: 100px;
+		--bubble-padding: 1rem;
+	}
+
+	.bubble-sns {
+		font-size: 0.75rem;
+	}
+
+	.bubble-product,
+	.bubble-blog {
+		font-size: 0.875rem;
+	}
+
+	.section-title {
+		font-size: 2rem;
+	}
+
+	.profile-card {
+		padding: 2rem;
+	}
+
+	.blog-grid,
+	.product-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.section-content {
+		padding: 3rem 1.5rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.bubble-section {
+		padding: 0.5rem;
+		--bubble-sns-size: 60px;
+		--bubble-product-size: 80px;
+		--bubble-blog-size: 80px;
+		--bubble-padding: 0.5rem;
+	}
+
+	.bubble-sns {
+		font-size: 0.65rem;
+	}
+
+	.bubble-product,
+	.bubble-blog {
+		font-size: 0.75rem;
+	}
+}

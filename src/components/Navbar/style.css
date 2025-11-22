@@ -1,0 +1,144 @@
+/* Navbarボタン - 右上に四角いボタンとして配置 */
+.navbar-btn {
+	position: fixed;
+	top: 1.5rem;
+	right: 1.5rem;
+	z-index: 1000;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.95);
+	border: 2px solid #e2e8f0;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	color: #1e293b;
+}
+
+.navbar-btn:hover {
+	background: rgba(255, 255, 255, 1);
+	border-color: #667eea;
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+	transform: translateY(-2px);
+}
+
+.navbar-btn:active {
+	transform: translateY(0);
+}
+
+/* メニューオーバーレイ */
+.menu-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	animation: fadeIn 0.3s ease;
+}
+
+/* メニューコンテナ */
+.menu-container {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 300px;
+	height: 100vh;
+	background: white;
+	z-index: 1000;
+	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+	animation: slideInRight 0.3s ease;
+	overflow-y: auto;
+}
+
+/* メニューナビゲーション */
+.menu-nav {
+	display: flex;
+	flex-direction: column;
+	padding: 5rem 2rem 2rem;
+	gap: 1rem;
+}
+
+.menu-item {
+	background: none;
+	border: none;
+	padding: 1rem 1.5rem;
+	font-size: 1.125rem;
+	font-weight: 500;
+	color: #1e293b;
+	cursor: pointer;
+	text-align: left;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	font-family: inherit;
+}
+
+.menu-item:hover {
+	background: #f1f5f9;
+	color: #667eea;
+}
+
+.menu-link {
+	text-decoration: none;
+	display: block;
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideInRight {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+	.navbar-btn {
+		top: 1rem;
+		right: 1rem;
+		width: 44px;
+		height: 44px;
+	}
+
+	.menu-container {
+		width: 280px;
+	}
+
+	.menu-nav {
+		padding: 4rem 1.5rem 2rem;
+	}
+
+	.menu-item {
+		font-size: 1rem;
+		padding: 0.875rem 1.25rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.navbar-btn {
+		top: 0.75rem;
+		right: 0.75rem;
+		width: 40px;
+		height: 40px;
+	}
+
+	.menu-container {
+		width: 100%;
+		max-width: 300px;
+	}
+}
