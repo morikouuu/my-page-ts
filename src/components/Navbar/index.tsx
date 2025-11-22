@@ -18,6 +18,7 @@ const Navbar = ({ isOpen, onToggle, onNavigate }: NavbarProps) => {
 		{ id: "profile", label: "プロフィール" },
 		{ id: "blog", label: "Blog" },
 		{ id: "product", label: "Product" },
+		{ id: "contact", label: "お問い合わせ" },
 	];
 
 	// 通常ページ用のメニュー項目（ページ遷移）
@@ -41,8 +42,7 @@ const Navbar = ({ isOpen, onToggle, onNavigate }: NavbarProps) => {
 					<div className="menu-container">
 						<nav className="menu-nav">
 							{isHomePage
-								? // Homeページではスムーズスクロール
-								  homeMenuItems.map((item) => (
+								? homeMenuItems.map((item) => (
 										<button
 											key={item.id}
 											onClick={() => onNavigate(item.id)}

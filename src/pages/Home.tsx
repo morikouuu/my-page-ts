@@ -347,6 +347,18 @@ const Home = () => {
 					</Link>
 				</div>
 			</section>
+			{/* お問い合わせセクション */}
+			<section id="contact" className="contact-section">
+				<div className="section-content">
+					<h2 className="section-title">Contact</h2>
+					<div className="contact-card">
+						<p>お問い合わせはこちらから</p>
+						<Link to="/contact" className="section-link">
+							お問い合わせフォームへ →
+						</Link>
+					</div>
+				</div>
+			</section>
 		</div>
 	);
 };
