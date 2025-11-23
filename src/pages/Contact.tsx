@@ -14,12 +14,39 @@ const Contact = () => {
 		message: "",
 	};
 
-	const { control, handleSubmit, reset } = useForm<ContactFormData>({
+	const {
+		control,
+		handleSubmit,
+		reset,
+		formState: { isDirty, isValid },
+	} = useForm<ContactFormData>({
 		defaultValues,
+		mode: "onChange",
 	});
 
-	const onSubmit: SubmitHandler<ContactFormData> = (data) => {
-		console.log(data);
+	const onSubmit: SubmitHandler<ContactFormData> = async (
+		data: ContactFormData
+	) => {
+		try {
+			await new Promise<void>((resolve, reject) => {
+				const isSuccess = Math.random() < 0.5;
+				if (isSuccess) {
+					console.log("Success");
+					resolve();
+				} else {
+					console.log("Error");
+					reject(new Error("Failed to submit"));
+				}
+			});
+
+			alert("送信成功");
+			handleReset();
+			console.log(data);
+		} catch (error) {
+			console.error("Error", error);
+			// 送信失敗時のアラート
+			alert("送信に失敗しました。再度お試しください。");
+		}
 	};
 
 	const handleReset = () => {
@@ -85,7 +112,9 @@ const Contact = () => {
 						</div>
 					)}
 				/>
-				<button type="submit">送信</button>
+				<button type="submit" disabled={!isValid || !isDirty}>
+					送信
+				</button>
 				<button type="button" onClick={handleReset}>
 					リセット
 				</button>
