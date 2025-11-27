@@ -31,19 +31,17 @@ const Contact = () => {
 			await new Promise<void>((resolve, reject) => {
 				const isSuccess = Math.random() < 0.5;
 				if (isSuccess) {
-					console.log("Success");
+					console.log("Success", data);
 					resolve();
 				} else {
-					console.log("Error");
 					reject(new Error("Failed to submit"));
 				}
 			});
 
 			alert("送信成功");
 			handleReset();
-			console.log(data);
 		} catch (error) {
-			console.error("Error", error);
+			console.log("送信に失敗しました。再度お試しください。", error);
 			// 送信失敗時のアラート
 			alert("送信に失敗しました。再度お試しください。");
 		}

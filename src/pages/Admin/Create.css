@@ -1,0 +1,137 @@
+/* src/pages/Admin/Create.css */
+.create-blog-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+.create-loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 50vh;
+	font-size: 1.2rem;
+}
+
+.create-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+	padding-bottom: 1rem;
+	border-bottom: 2px solid #e2e8f0;
+}
+
+.create-header h1 {
+	margin: 0;
+	color: #334155;
+}
+
+.btn-back {
+	padding: 0.75rem 1.5rem;
+	background: #f1f5f9;
+	color: #334155;
+	border: none;
+	border-radius: 6px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.btn-back:hover {
+	background: #e2e8f0;
+}
+
+.blog-form {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+	margin-bottom: 1.5rem;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+	color: #334155;
+}
+
+.form-input {
+	width: 100%;
+}
+
+.form-input input,
+.form-input textarea {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	font-size: 1rem;
+	font-family: inherit;
+	transition: border-color 0.2s ease;
+	box-sizing: border-box;
+}
+
+.form-input input:focus,
+.form-input textarea:focus {
+	outline: none;
+	border-color: #667eea;
+}
+
+.form-input textarea {
+	min-height: 120px;
+	resize: vertical;
+}
+
+.error-message {
+	display: block;
+	margin-top: 0.5rem;
+	color: #ef4444;
+	font-size: 0.875rem;
+}
+
+.form-actions {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+}
+
+.form-actions button {
+	padding: 0.75rem 2rem;
+	border: none;
+	border-radius: 6px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.form-actions button[type="submit"] {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+}
+
+.form-actions button[type="submit"]:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.form-actions button[type="submit"]:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.form-actions button[type="button"] {
+	background: #f1f5f9;
+	color: #334155;
+}
+
+.form-actions button[type="button"]:hover {
+	background: #e2e8f0;
+}
+

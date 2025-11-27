@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { blogData } from "../data/blogData";
 import "./Home.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { getPublishedBlogs } from "../services/blogService";
+import type { BlogData } from "../types/type";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
@@ -18,6 +19,47 @@ const Home = () => {
 	} | null>(null);
 
 	const hasMoved = useRef(false);
+
+	// ブログデータの状態管理
+	const [blogs, setBlogs] = useState<BlogData[]>([]);
+	const [blogsLoading, setBlogsLoading] = useState(true);
+
+	// Firebaseからブログデータを取得
+	useEffect(() => {
+		const loadBlogs = async () => {
+			try {
+				const blogList = await getPublishedBlogs();
+				// FirestoreBlogDataをBlogDataに変換
+				const convertedBlogs: BlogData[] = blogList.map((blog) => ({
+					id: blog.id || "",
+					title: blog.title,
+					date:
+						blog.date ||
+						blog.createdAt?.toDate().toISOString().split("T")[0] ||
+						"",
+					content: blog.content || "",
+					published: blog.published ?? true,
+					createdAt: blog.createdAt?.toDate().toISOString(),
+					link: `/blog/${blog.id}`,
+				}));
+				// 日付でソート（新しい順）
+				convertedBlogs.sort((a, b) => {
+					const dateA = new Date(a.date || a.createdAt || "").getTime();
+					const dateB = new Date(b.date || b.createdAt || "").getTime();
+					return dateB - dateA;
+				});
+				setBlogs(convertedBlogs);
+			} catch (error) {
+				console.error("ブログの取得に失敗しました:", error);
+				// エラー時は空配列を設定
+				setBlogs([]);
+			} finally {
+				setBlogsLoading(false);
+			}
+		};
+
+		loadBlogs();
+	}, []);
 
 	const snsBubbles = [
 		{
@@ -43,32 +85,48 @@ const Home = () => {
 	];
 
 	// 最新3件のブログを表示
-	const latestBlogs = blogData.slice(0, 3);
+	const latestBlogs = useMemo(() => blogs.slice(0, 3), [blogs]);
 
-	// ブログバブル用のデータ
-	const blogBubbles = [
-		{
-			id: latestBlogs[0].id,
-			label: latestBlogs[0].label.replace(" 📃", ""),
-			link: latestBlogs[0].link,
-			x: 25,
-			y: 40,
-		},
-		{
-			id: latestBlogs[1].id,
-			label: latestBlogs[1].label.replace(" 📃", ""),
-			link: latestBlogs[1].link,
-			x: 50,
-			y: 60,
-		},
-		{
-			id: latestBlogs[2].id,
-			label: latestBlogs[2].label.replace(" 📃", ""),
-			link: latestBlogs[2].link,
-			x: 75,
-			y: 30,
-		},
-	];
+	// ブログバブル用のデータ（存在するブログのみ）
+	const blogBubbles = useMemo(() => {
+		const bubbles: Array<{
+			id: string | number;
+			title: string;
+			link: string;
+			x: number;
+			y: number;
+		}> = [];
+
+		if (latestBlogs[0]) {
+			bubbles.push({
+				id: latestBlogs[0].id,
+				title: latestBlogs[0].title || "",
+				link: latestBlogs[0].link || `/blog/${latestBlogs[0].id}`,
+				x: 25,
+				y: 40,
+			});
+		}
+		if (latestBlogs[1]) {
+			bubbles.push({
+				id: latestBlogs[1].id,
+				title: latestBlogs[1].title || "",
+				link: latestBlogs[1].link || `/blog/${latestBlogs[1].id}`,
+				x: 50,
+				y: 60,
+			});
+		}
+		if (latestBlogs[2]) {
+			bubbles.push({
+				id: latestBlogs[2].id,
+				title: latestBlogs[2].title || "",
+				link: latestBlogs[2].link || `/blog/${latestBlogs[2].id}`,
+				x: 75,
+				y: 30,
+			});
+		}
+
+		return bubbles;
+	}, [latestBlogs]);
 	// バブルの位置を取得する関数
 	const getBubblePosition = (
 		bubbleId: string,
@@ -268,7 +326,7 @@ const Home = () => {
 								handleMouseDown(e, bubbleId, position.top, position.left)
 							}
 						>
-							{blog.label}
+							{blog.title}
 						</Link>
 					);
 				})}
@@ -301,20 +359,41 @@ const Home = () => {
 			<section id="blog" className="blog-section">
 				<div className="section-content">
 					<h2 className="section-title">Blog</h2>
-					<div className="blog-grid">
-						{latestBlogs.map((blog) => (
-							<Link key={blog.id} to={blog.link} className="blog-card">
-								<div className="blog-date">{blog.date}</div>
-								<h3 className="blog-title">{blog.label}</h3>
-								<p className="blog-excerpt">
-									{blog.excerpt || "ブログの内容がここに表示されます..."}
-								</p>
-							</Link>
-						))}
-					</div>
-					<Link to="/blog" className="section-link">
-						すべてのブログを見る →
-					</Link>
+					{blogsLoading ? (
+						<div style={{ textAlign: "center", padding: "2rem" }}>
+							読み込み中...
+						</div>
+					) : (
+						<>
+							<div className="blog-grid">
+								{latestBlogs.length > 0 ? (
+									latestBlogs.map((blog) => (
+										<Link
+											key={blog.id}
+											to={blog.link || `/blog/${blog.id}`}
+											className="blog-card"
+										>
+											<div className="blog-date">{blog.date}</div>
+											<h3 className="blog-title">{blog.title}</h3>
+											<p className="blog-excerpt">
+												{blog.content?.substring(0, 100) ||
+													"ブログの内容がここに表示されます..."}
+											</p>
+										</Link>
+									))
+								) : (
+									<div style={{ textAlign: "center", padding: "2rem" }}>
+										ブログがありません
+									</div>
+								)}
+							</div>
+							{latestBlogs.length > 0 && (
+								<Link to="/blog" className="section-link">
+									すべてのブログを見る →
+								</Link>
+							)}
+						</>
+					)}
 				</div>
 			</section>
 
