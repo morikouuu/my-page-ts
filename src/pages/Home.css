@@ -13,11 +13,6 @@
 	position: relative;
 	overflow: hidden;
 	box-sizing: border-box;
-	/* CSS変数でバブルのサイズを管理 */
-	--bubble-sns-size: 80px;
-	--bubble-product-size: 120px;
-	--bubble-blog-size: 120px;
-	--bubble-padding: 2rem;
 }
 
 .bubble {
@@ -40,6 +35,7 @@
 	line-height: 1.2;
 	transform: translate(-50%, -50%);
 	box-sizing: border-box;
+	animation: float 3s ease-in-out infinite;
 }
 
 .bubble::before {
@@ -88,26 +84,53 @@
 
 /* SNSバブル - 小さめ */
 .bubble-sns {
-	width: var(--bubble-sns-size);
-	height: var(--bubble-sns-size);
-	font-size: 0.875rem;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	width: 120px;
+	height: 120px;
+	font-size: 0.9rem;
+	background: lab(72.04% 9.37 -43.06);
 }
 
 /* プロダクトバブル */
 .bubble-product {
-	width: var(--bubble-product-size);
-	height: var(--bubble-product-size);
-	font-size: 1rem;
-	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+	width: 200px;
+	height: 200px;
+	font-size: 1.2rem;
+	background: #81eaff;
 }
 
 /* ブログバブル */
 .bubble-blog {
-	width: var(--bubble-blog-size);
-	height: var(--bubble-blog-size);
-	font-size: 0.9rem;
-	background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+	width: 200px;
+	height: 200px;
+	font-size: 1.2rem;
+	background: #667eea;
+}
+/* バブルの揺れアニメーション */
+@keyframes float {
+	0%,
+	100% {
+		transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+	}
+	25% {
+		transform: translate(-50%, -50%) translateY(-10px) rotate(1deg);
+	}
+	50% {
+		transform: translate(-50%, -50%) translateY(-5px) rotate(0deg);
+	}
+	75% {
+		transform: translate(-50%, -50%) translateY(-10px) rotate(-1deg);
+	}
+}
+
+/* バブルにアニメーションを適用 */
+.bubble {
+	/* 既存のスタイル... */
+	animation: float 3s ease-in-out infinite;
+}
+
+/* ドラッグ中はアニメーションを停止 */
+.bubble.dragging {
+	animation: none;
 }
 
 /* セクション共通スタイル */
@@ -158,24 +181,19 @@
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.profile-avatar {
-	margin-bottom: 1rem;
+.profile-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%; /* 円形にする場合 */
 }
 
-.avatar-placeholder {
+.profile-avatar {
 	width: 120px;
 	height: 120px;
 	border-radius: 50%;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-	font-size: 3rem;
-	font-weight: 700;
-	box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+	overflow: hidden;
 }
-
 .profile-info {
 	text-align: center;
 	max-width: 600px;

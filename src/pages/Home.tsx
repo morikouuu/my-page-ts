@@ -24,7 +24,6 @@ const Home = () => {
 	const [blogs, setBlogs] = useState<BlogData[]>([]);
 	const [blogsLoading, setBlogsLoading] = useState(true);
 
-	// Firebaseからブログデータを取得
 	useEffect(() => {
 		const loadBlogs = async () => {
 			try {
@@ -42,7 +41,7 @@ const Home = () => {
 					createdAt: blog.createdAt?.toDate().toISOString(),
 					link: `/blog/${blog.id}`,
 				}));
-				// 日付でソート（新しい順）
+
 				convertedBlogs.sort((a, b) => {
 					const dateA = new Date(a.date || a.createdAt || "").getTime();
 					const dateB = new Date(b.date || b.createdAt || "").getTime();
@@ -79,12 +78,12 @@ const Home = () => {
 	];
 
 	const productBubbles = [
-		{ id: 1, x: 60, y: 30, label: "coming soon", link: "/product" },
+		{ id: 1, x: 60, y: 30, label: "coming soon", link: null },
 		{ id: 2, x: 90, y: 20, label: null, link: null },
 		{ id: 3, x: 45, y: 70, label: null, link: null },
 	];
 
-	// 最新3件のブログを表示
+	// 最新3件のブログ
 	const latestBlogs = useMemo(() => blogs.slice(0, 3), [blogs]);
 
 	// ブログバブル用のデータ（存在するブログのみ）
@@ -149,20 +148,18 @@ const Home = () => {
 		e.preventDefault();
 		e.stopPropagation();
 
-		// ドラッグ開始情報を記録
 		dragStart.current = {
 			x: e.clientX,
 			y: e.clientY,
 			bubbleId,
 			bubbleTop: currentTop,
 			bubbleLeft: currentLeft,
-			element: e.currentTarget as HTMLElement, // リンク要素への参照を保存
+			element: e.currentTarget as HTMLElement,
 		};
 
 		hasMoved.current = false;
 		setDragging(bubbleId);
 
-		// マウス移動の処理（ネイティブのMouseEventを使用）
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!dragStart.current) return;
 
@@ -171,7 +168,7 @@ const Home = () => {
 			const moveY = Math.abs(e.clientY - dragStart.current.y);
 			const moveDistance = Math.sqrt(moveX * moveX + moveY * moveY);
 
-			// 5px以上移動したらドラッグと判定
+			// ドラッグ判定
 			if (moveDistance > 5) {
 				hasMoved.current = true;
 			}
@@ -287,7 +284,7 @@ const Home = () => {
 									<Link
 										key={product.id}
 										data-bubble-id={bubbleId}
-										to={product.link}
+										to={product.link || ""}
 										className={`bubble bubble-product ${
 											isDragging ? "dragging" : ""
 										}`}
@@ -338,14 +335,18 @@ const Home = () => {
 					<h2 className="section-title">Profile</h2>
 					<div className="profile-card">
 						<div className="profile-avatar">
-							<div className="avatar-placeholder">M</div>
+							<img
+								src="/images/profile.png"
+								alt="profile画像"
+								className="profile-image"
+							/>
 						</div>
 						<div className="profile-info">
-							<h3 className="profile-name">Your Name</h3>
+							<h3 className="profile-name">morikouuu</h3>
 							<p className="profile-bio">
-								こんにちは！Web開発者として活動しています。
-								フロントエンド開発を中心に、モダンな技術スタックを使って
-								ユーザー体験の向上に取り組んでいます。
+								このページを見ていただきありがとうございます。
+								ここでは私の日々の気づきや技術メモをブログで書き留めています。
+								また、今は少ないですが制作物もここに残していきたいと思っています。
 							</p>
 							<Link to="/profile" className="profile-link">
 								詳しく見る →
@@ -406,7 +407,7 @@ const Home = () => {
 							product.label ? (
 								<Link
 									key={product.id}
-									to={product.link}
+									to={product.link || ""}
 									className="product-card"
 								>
 									<div className="product-placeholder">{product.label}</div>
@@ -420,21 +421,6 @@ const Home = () => {
 								</div>
 							)
 						)}
-					</div>
-					<Link to="/product" className="section-link">
-						すべてのプロダクトを見る →
-					</Link>
-				</div>
-			</section>
-			{/* お問い合わせセクション */}
-			<section id="contact" className="contact-section">
-				<div className="section-content">
-					<h2 className="section-title">Contact</h2>
-					<div className="contact-card">
-						<p>お問い合わせはこちらから</p>
-						<Link to="/contact" className="section-link">
-							お問い合わせフォームへ →
-						</Link>
 					</div>
 				</div>
 			</section>

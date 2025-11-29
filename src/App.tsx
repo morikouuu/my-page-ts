@@ -8,6 +8,7 @@ import CreateBlog from "./pages/Admin/Create";
 import EditBlog from "./pages/Admin/Edit";
 import BlogList from "./pages/BlogList";
 import BlogDetail from "./pages/BlogDetail";
+import Profile from "./pages/Profile";
 import "./App.css";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/blog" element={<BlogList />} />
 					<Route path="/blog/:id" element={<BlogDetail />} />
+					<Route path="/profile" element={<Profile />} />
 					<Route path="*" element={<h1>Not Found Page</h1>} />
 				</Route>
 
