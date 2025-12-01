@@ -1,62 +1,10 @@
-// src/pages/BlogDetail.tsx
-import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getBlogById } from "../services/blogService";
-import type { BlogData } from "../types/type";
+import { useBlog } from "../hooks/useBlog";
 import "./BlogDetail.css";
 
 const BlogDetail = () => {
 	const { id } = useParams<{ id: string }>();
-	const [blog, setBlog] = useState<BlogData | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!id) {
-			setError("ブログIDが指定されていません");
-			setLoading(false);
-			return;
-		}
-
-		const loadBlog = async () => {
-			try {
-				const blogData = await getBlogById(id);
-				if (!blogData) {
-					setError("ブログが見つかりません");
-					return;
-				}
-
-				// 公開されていないブログは一般ユーザーには表示しない
-				if (blogData.published === false) {
-					setError("このブログは公開されていません");
-					return;
-				}
-
-				// FirestoreBlogDataをBlogDataに変換
-				const convertedBlog: BlogData = {
-					id: blogData.id || "",
-					title: blogData.title,
-					date:
-						blogData.date ||
-						blogData.createdAt?.toDate().toISOString().split("T")[0] ||
-						"",
-					content: blogData.content || "",
-					published: blogData.published ?? true,
-					createdAt: blogData.createdAt?.toDate().toISOString(),
-					link: `/blog/${blogData.id}`,
-				};
-
-				setBlog(convertedBlog);
-			} catch (error) {
-				console.error("ブログの取得に失敗しました:", error);
-				setError("ブログの取得に失敗しました");
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		loadBlog();
-	}, [id]);
+	const { blog, loading, error } = useBlog(id);
 
 	if (loading) {
 		return (
@@ -107,4 +55,3 @@ const BlogDetail = () => {
 };
 
 export default BlogDetail;
-

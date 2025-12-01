@@ -1,64 +1,31 @@
 import { Link } from "react-router-dom";
 import "./Home.css";
-import { useState, useRef, useEffect, useMemo } from "react";
-import { getPublishedBlogs } from "../services/blogService";
-import type { BlogData } from "../types/type";
+import { useState, useRef, useMemo } from "react";
+import { usePublishedBlogs } from "../hooks/usePublishedBlogs";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
 		[key: string]: { top: number; left: number };
 	}>({});
 	const [dragging, setDragging] = useState<string | null>(null);
-	const dragStart = useRef<{
-		x: number;
-		y: number;
+	const dragState = useRef<{
 		bubbleId: string;
-		bubbleTop: number;
-		bubbleLeft: number;
-		element: HTMLElement | null; // リンク要素への参照を追加
+		startX: number;
+		startY: number;
+		element: HTMLElement;
 	} | null>(null);
 
-	const hasMoved = useRef(false);
+	// ブログデータの取得
+	const { blogs: rawBlogs, loading: blogsLoading } = usePublishedBlogs();
 
-	// ブログデータの状態管理
-	const [blogs, setBlogs] = useState<BlogData[]>([]);
-	const [blogsLoading, setBlogsLoading] = useState(true);
-
-	useEffect(() => {
-		const loadBlogs = async () => {
-			try {
-				const blogList = await getPublishedBlogs();
-				// FirestoreBlogDataをBlogDataに変換
-				const convertedBlogs: BlogData[] = blogList.map((blog) => ({
-					id: blog.id || "",
-					title: blog.title,
-					date:
-						blog.date ||
-						blog.createdAt?.toDate().toISOString().split("T")[0] ||
-						"",
-					content: blog.content || "",
-					published: blog.published ?? true,
-					createdAt: blog.createdAt?.toDate().toISOString(),
-					link: `/blog/${blog.id}`,
-				}));
-
-				convertedBlogs.sort((a, b) => {
-					const dateA = new Date(a.date || a.createdAt || "").getTime();
-					const dateB = new Date(b.date || b.createdAt || "").getTime();
-					return dateB - dateA;
-				});
-				setBlogs(convertedBlogs);
-			} catch (error) {
-				console.error("ブログの取得に失敗しました:", error);
-				// エラー時は空配列を設定
-				setBlogs([]);
-			} finally {
-				setBlogsLoading(false);
-			}
-		};
-
-		loadBlogs();
-	}, []);
+	// 日付でソートしたブログリスト
+	const blogs = useMemo(() => {
+		return [...rawBlogs].sort((a, b) => {
+			const dateA = new Date(a.date || a.createdAt || "").getTime();
+			const dateB = new Date(b.date || b.createdAt || "").getTime();
+			return dateB - dateA;
+		});
+	}, [rawBlogs]);
 
 	const snsBubbles = [
 		{
@@ -86,7 +53,6 @@ const Home = () => {
 	// 最新3件のブログ
 	const latestBlogs = useMemo(() => blogs.slice(0, 3), [blogs]);
 
-	// ブログバブル用のデータ（存在するブログのみ）
 	const blogBubbles = useMemo(() => {
 		const bubbles: Array<{
 			id: string | number;
@@ -138,59 +104,51 @@ const Home = () => {
 		return { top: initialY, left: initialX };
 	};
 
-	// ドラッグ開始判定の処理
-	const handleMouseDown = (
-		e: React.MouseEvent,
-		bubbleId: string,
-		currentTop: number,
-		currentLeft: number
-	) => {
+	// ドラッグ処理
+	const handleMouseDown = (e: React.MouseEvent, bubbleId: string) => {
 		e.preventDefault();
 		e.stopPropagation();
 
-		dragStart.current = {
-			x: e.clientX,
-			y: e.clientY,
+		const bubbleSection = document.getElementById("bubble-area");
+		if (!bubbleSection) return;
+
+		let hasMoved = false;
+
+		dragState.current = {
 			bubbleId,
-			bubbleTop: currentTop,
-			bubbleLeft: currentLeft,
+			startX: e.clientX,
+			startY: e.clientY,
 			element: e.currentTarget as HTMLElement,
 		};
 
-		hasMoved.current = false;
 		setDragging(bubbleId);
 
-		const handleMouseMove = (e: MouseEvent) => {
-			if (!dragStart.current) return;
+		const onMouseMove = (e: MouseEvent) => {
+			if (!dragState.current || !bubbleSection) return;
 
-			// 移動距離を計算
-			const moveX = Math.abs(e.clientX - dragStart.current.x);
-			const moveY = Math.abs(e.clientY - dragStart.current.y);
-			const moveDistance = Math.sqrt(moveX * moveX + moveY * moveY);
+			const sectionRect = bubbleSection.getBoundingClientRect();
+			const moveX = e.clientX - dragState.current.startX;
+			const moveY = e.clientY - dragState.current.startY;
+			const moved = Math.abs(moveX) > 5 || Math.abs(moveY) > 5;
 
-			// ドラッグ判定
-			if (moveDistance > 5) {
-				hasMoved.current = true;
-			}
+			if (moved) {
+				hasMoved = true;
+				const currentBubbleId = dragState.current.bubbleId;
+				const newLeft = Math.max(
+					0,
+					Math.min(
+						100,
+						((e.clientX - sectionRect.left) / sectionRect.width) * 100
+					)
+				);
+				const newTop = Math.max(
+					0,
+					Math.min(
+						100,
+						((e.clientY - sectionRect.top) / sectionRect.height) * 100
+					)
+				);
 
-			// ドラッグ中の場合のみ位置を更新
-			if (hasMoved.current && dragStart.current) {
-				const bubbleSection = document.getElementById("bubble-area");
-				if (!bubbleSection) return;
-
-				const sectionRect = bubbleSection.getBoundingClientRect();
-
-				// マウス位置からパーセンテージを計算
-				let newLeft =
-					((e.clientX - sectionRect.left) / sectionRect.width) * 100;
-				let newTop = ((e.clientY - sectionRect.top) / sectionRect.height) * 100;
-
-				// 範囲制限（0%～100%）
-				newLeft = Math.max(0, Math.min(100, newLeft));
-				newTop = Math.max(0, Math.min(100, newTop));
-
-				// dragStart.current の値を安全に取得（null チェック済み）
-				const currentBubbleId = dragStart.current.bubbleId;
 				setBubblePositions((prev) => ({
 					...prev,
 					[currentBubbleId]: { top: newTop, left: newLeft },
@@ -198,43 +156,26 @@ const Home = () => {
 			}
 		};
 
-		// マウスアップの処理（ネイティブのMouseEventを使用）
-		const handleMouseUp = () => {
-			// クリック判定（移動していない場合）
-			if (!hasMoved.current && dragStart.current && dragStart.current.element) {
-				// リンク要素をクリックして遷移を実行
-				const linkElement = dragStart.current.element;
-
-				// <a> タグの場合
-				if (
-					linkElement.tagName === "A" &&
-					linkElement instanceof HTMLAnchorElement
-				) {
-					const href = linkElement.getAttribute("href");
-					if (href) {
-						if (linkElement.getAttribute("target") === "_blank") {
-							// 外部リンクの場合
-							window.open(href, "_blank", "noopener,noreferrer");
-						} else {
-							// 内部リンクの場合
-							linkElement.click();
-						}
+		const onMouseUp = () => {
+			if (dragState.current && !hasMoved) {
+				const el = dragState.current.element;
+				if (el instanceof HTMLAnchorElement) {
+					if (el.target === "_blank") {
+						window.open(el.href, "_blank", "noopener,noreferrer");
+					} else {
+						el.click();
 					}
 				}
 			}
 
 			setDragging(null);
-			dragStart.current = null;
-			hasMoved.current = false;
-
-			// イベントリスナーを削除
-			document.removeEventListener("mousemove", handleMouseMove);
-			document.removeEventListener("mouseup", handleMouseUp);
+			dragState.current = null;
+			document.removeEventListener("mousemove", onMouseMove);
+			document.removeEventListener("mouseup", onMouseUp);
 		};
 
-		// グローバルイベントリスナーを追加
-		document.addEventListener("mousemove", handleMouseMove);
-		document.addEventListener("mouseup", handleMouseUp);
+		document.addEventListener("mousemove", onMouseMove);
+		document.addEventListener("mouseup", onMouseUp);
 	};
 
 	return (
@@ -259,9 +200,7 @@ const Home = () => {
 								top: `${position.top}%`,
 								left: `${position.left}%`,
 							}}
-							onMouseDown={(e) =>
-								handleMouseDown(e, bubbleId, position.top, position.left)
-							}
+							onMouseDown={(e) => handleMouseDown(e, bubbleId)}
 						>
 							{sns.label}
 						</a>
@@ -292,9 +231,7 @@ const Home = () => {
 											top: `${position.top}%`,
 											left: `${position.left}%`,
 										}}
-										onMouseDown={(e) =>
-											handleMouseDown(e, bubbleId, position.top, position.left)
-										}
+										onMouseDown={(e) => handleMouseDown(e, bubbleId)}
 									>
 										{product.label}
 									</Link>
@@ -319,9 +256,7 @@ const Home = () => {
 								top: `${position.top}%`,
 								left: `${position.left}%`,
 							}}
-							onMouseDown={(e) =>
-								handleMouseDown(e, bubbleId, position.top, position.left)
-							}
+							onMouseDown={(e) => handleMouseDown(e, bubbleId)}
 						>
 							{blog.title}
 						</Link>
@@ -421,6 +356,19 @@ const Home = () => {
 								</div>
 							)
 						)}
+					</div>
+				</div>
+			</section>
+			<section id="contact" className="contact-section">
+				<div className="section-content">
+					<h2 className="section-title">Contact</h2>
+					<div className="contact-card">
+						<p className="contact-description">
+							お問い合わせやご質問がございましたら、お気軽にご連絡ください。
+						</p>
+						<Link to="/contact" className="contact-link">
+							お問い合わせフォームへ →
+						</Link>
 					</div>
 				</div>
 			</section>

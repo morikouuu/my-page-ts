@@ -14,20 +14,20 @@ const Navbar = ({ isOpen, onToggle, onNavigate }: NavbarProps) => {
 
 	// Homeページ用のメニュー項目（スムーズスクロール）
 	const homeMenuItems = [
-		{ id: "bubble-area", label: "トップ" },
-		{ id: "profile", label: "プロフィール" },
+		{ id: "bubble-area", label: "Home" },
+		{ id: "profile", label: "Profile" },
 		{ id: "blog", label: "Blog" },
 		{ id: "product", label: "Product" },
-		{ id: "contact", label: "お問い合わせ" },
+		{ id: "contact", label: "Contact" },
 	];
 
 	// 通常ページ用のメニュー項目（ページ遷移）
 	const pageMenuItems = [
-		{ path: "/", label: " ホーム" },
-		{ path: "/profile", label: " プロフィール" },
+		{ path: "/", label: " Home" },
+		{ path: "/profile", label: " Profile" },
 		{ path: "/blog", label: "Blog" },
 		{ path: "/product", label: "Product" },
-		{ path: "/contact", label: "お問い合わせ" },
+		{ path: "/contact", label: "Contact" },
 	];
 
 	return (

@@ -1,48 +1,10 @@
 // src/pages/BlogList.tsx
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getPublishedBlogs } from "../services/blogService";
-import type { BlogData } from "../types/type";
+import { usePublishedBlogs } from "../hooks/usePublishedBlogs";
 import "./BlogList.css";
 
 const BlogList = () => {
-	const [blogs, setBlogs] = useState<BlogData[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		const loadBlogs = async () => {
-			try {
-				const blogList = await getPublishedBlogs();
-				// FirestoreBlogDataをBlogDataに変換
-				const convertedBlogs: BlogData[] = blogList.map((blog) => ({
-					id: blog.id || "",
-					title: blog.title,
-					date:
-						blog.date ||
-						blog.createdAt?.toDate().toISOString().split("T")[0] ||
-						"",
-					content: blog.content || "",
-					published: blog.published ?? true,
-					createdAt: blog.createdAt?.toDate().toISOString(),
-					link: `/blog/${blog.id}`,
-				}));
-				// 日付でソート（新しい順）
-				convertedBlogs.sort((a, b) => {
-					const dateA = new Date(a.date || a.createdAt || "").getTime();
-					const dateB = new Date(b.date || b.createdAt || "").getTime();
-					return dateB - dateA;
-				});
-				setBlogs(convertedBlogs);
-			} catch (error) {
-				console.error("ブログの取得に失敗しました:", error);
-				setBlogs([]);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		loadBlogs();
-	}, []);
+	const { blogs, loading } = usePublishedBlogs();
 
 	if (loading) {
 		return (
@@ -89,4 +51,3 @@ const BlogList = () => {
 };
 
 export default BlogList;
-

@@ -1,6 +1,6 @@
 // src/hooks/useBlogs.ts
 import { useState, useCallback } from "react";
-import { getAllBlogs } from "../services/blogService";
+import { getAllBlogs, convertToBlogData } from "../services/blogService";
 import type { BlogData } from "../types/type";
 
 export const useBlogs = () => {
@@ -14,21 +14,13 @@ export const useBlogs = () => {
 		try {
 			const blogList = await getAllBlogs();
 			// FirestoreBlogDataをBlogDataに変換
-			const convertedBlogs: BlogData[] = blogList.map((blog) => ({
-				id: blog.id || "",
-				title: blog.title,
-				date: blog.date || (blog.createdAt?.toDate().toISOString().split("T")[0] || ""),
-				content: blog.content || "",
-				published: blog.published ?? true,
-				createdAt: blog.createdAt?.toDate().toISOString(),
-				link: `/blog/${blog.id}`,
-			}));
+			const convertedBlogs: BlogData[] = blogList.map(convertToBlogData);
 			setBlogs(convertedBlogs);
 		} catch (err) {
 			const errorMessage =
 				err instanceof Error ? err.message : "ブログの取得に失敗しました";
 			setError(errorMessage);
-			alert(errorMessage);
+			console.error("ブログの取得に失敗しました:", err);
 		} finally {
 			setLoading(false);
 		}
@@ -36,4 +28,3 @@ export const useBlogs = () => {
 
 	return { blogs, loading, error, loadBlogs };
 };
-

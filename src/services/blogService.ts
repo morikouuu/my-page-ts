@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "./firebase";
+import type { BlogData } from "../types/type";
 
 export type FirestoreBlogData = {
 	id?: string;
@@ -17,8 +18,26 @@ export type FirestoreBlogData = {
 	title: string;
 	content: string;
 	date: string;
-	published?: boolean;
 	authorId?: string;
+};
+
+/**
+ * FirestoreBlogDataをBlogDataに変換
+ */
+export const convertToBlogData = (
+	firestoreBlog: FirestoreBlogData
+): BlogData => {
+	return {
+		id: firestoreBlog.id || "",
+		title: firestoreBlog.title,
+		date:
+			firestoreBlog.date ||
+			firestoreBlog.createdAt?.toDate().toISOString().split("T")[0] ||
+			"",
+		content: firestoreBlog.content || "",
+		createdAt: firestoreBlog.createdAt?.toDate().toISOString(),
+		link: `/blog/${firestoreBlog.id}`,
+	};
 };
 
 export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
@@ -33,7 +52,6 @@ export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
 				title: data.title || "",
 				content: data.content || "",
 				date: data.date || "",
-				published: data.published ?? true,
 				authorId: data.authorId || "",
 			};
 		});
@@ -44,29 +62,8 @@ export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
 };
 
 // 公開済みブログのみを取得（一般ユーザー向け）
-export const getPublishedBlogs = async (): Promise<FirestoreBlogData[]> => {
-	try {
-		const blogsRef = collection(db, "blogs");
-		const snapshot = await getDocs(blogsRef);
-		return snapshot.docs
-			.map((doc) => {
-				const data = doc.data();
-				return {
-					id: doc.id,
-					createdAt: data.createdAt,
-					title: data.title || "",
-					content: data.content || "",
-					date: data.date || "",
-					published: data.published ?? true,
-					authorId: data.authorId || "",
-				};
-			})
-			.filter((blog) => blog.published !== false);
-	} catch (error) {
-		console.error("Error fetching published blogs:", error);
-		throw error;
-	}
-};
+// 存在するブログ = 公開済み（削除は物理削除）
+export const getPublishedBlogs = getAllBlogs;
 
 export const getBlogById = async (
 	blogId: string
@@ -86,7 +83,6 @@ export const getBlogById = async (
 			title: data.title || "",
 			content: data.content || "",
 			date: data.date || "",
-			published: data.published ?? true,
 			authorId: data.authorId || "",
 		};
 	} catch (error) {
@@ -110,7 +106,6 @@ export const createBlog = async (
 			...blogData,
 			authorId: currentUser.uid,
 			createdAt: Timestamp.now(),
-			published: blogData.published ?? true,
 		};
 
 		const docRef = await addDoc(collection(db, "blogs"), blogDoc);

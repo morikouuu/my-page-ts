@@ -16,7 +16,7 @@ const Footer = () => {
 		<footer className="footer">
 			<div className="footer-content">
 				<p className="footer-copyright">
-					© {currentYear} Your Name. All rights reserved.
+					© {currentYear} morikouuu. All rights reserved.
 				</p>
 				<div className="footer-links">
 					{snsBubbles.map((sns) => (

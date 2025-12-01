@@ -4,7 +4,6 @@ export type BlogData = {
 	title: string;
 	date: string;
 	content: string;
-	published?: boolean; // デフォルト: true
 	createdAt?: string; // ISO 8601形式
 	link?: string; // 計算可能（/blog/${id}）
 };
@@ -42,7 +41,6 @@ export type FirebaseBlogData = {
 	content: string;
 	createdAt: Date;
 	updatedAt: Date;
-	published: boolean;
 };
 
 export type LoginData = {
