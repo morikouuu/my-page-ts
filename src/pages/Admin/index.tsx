@@ -1,18 +1,41 @@
 // src/pages/Admin/index.tsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteBlog } from "../../services/blogService";
 import { signOut } from "../../services/authService";
 import { useAuth } from "../../hooks/useAuth";
-import { useBlogs } from "../../hooks/useBlogs";
+import { getAllBlogs, convertToBlogData } from "../../services/blogService";
+
 import type { BlogData } from "../../types/type";
 import "./index.css";
 
 const BlogAdmin = () => {
 	const navigate = useNavigate();
 	const { isAdmin, loading: authLoading } = useAuth();
-	const { blogs, loading, loadBlogs } = useBlogs();
 	const hasLoadedRef = useRef(false);
+
+	const [blogs, setBlogs] = useState<BlogData[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
+	const loadBlogs = useCallback(async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const blogList = await getAllBlogs();
+			// FirestoreBlogDataをBlogDataに変換
+			const convertedBlogs: BlogData[] = blogList.map(convertToBlogData);
+			setBlogs(convertedBlogs);
+		} catch (err) {
+			// ← error を err に変更（変数名の衝突を回避）
+			const errorMessage =
+				err instanceof Error ? err.message : "ブログの取得に失敗しました";
+			setError(errorMessage);
+			console.error("ブログの取得に失敗しました:", err);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
 
 	// 認証チェックとデータ読み込み（初回のみ）
 	useEffect(() => {
@@ -41,8 +64,9 @@ const BlogAdmin = () => {
 			alert("削除しました");
 			// 再読み込み（hasLoadedRefはリセットしない）
 			loadBlogs();
-		} catch (error) {
-			console.error("削除に失敗しました:", error);
+		} catch (err) {
+			// ← error を err に変更
+			console.error("削除に失敗しました:", err);
 			alert("削除に失敗しました");
 		}
 	};
@@ -79,7 +103,14 @@ const BlogAdmin = () => {
 			</div>
 
 			<div className="admin-content">
-				{blogs.length === 0 ? (
+				{error ? (
+					<div className="admin-error">
+						<p>エラー: {error}</p>
+						<button onClick={loadBlogs} className="btn-retry">
+							再試行
+						</button>
+					</div>
+				) : blogs.length === 0 ? (
 					<div className="empty-state">
 						<p>ブログがありません</p>
 						<Link to="/admin/create" className="btn-create">
@@ -103,13 +134,6 @@ const BlogAdmin = () => {
 									<td>{blog.date}</td>
 									<td>{blog.id}</td>
 									<td className="table-actions">
-										<Link
-											to={`/blog/${blog.id}`}
-											target="_blank"
-											className="btn-view"
-										>
-											表示
-										</Link>
 										<Link to={`/admin/edit/${blog.id}`} className="btn-edit">
 											編集
 										</Link>

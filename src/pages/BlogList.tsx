@@ -1,10 +1,10 @@
 // src/pages/BlogList.tsx
 import { Link } from "react-router-dom";
-import { usePublishedBlogs } from "../hooks/usePublishedBlogs";
+import { useBlogs } from "../hooks/useBlogs";
 import "./BlogList.css";
 
 const BlogList = () => {
-	const { blogs, loading } = usePublishedBlogs();
+	const { blogs, loading } = useBlogs();
 
 	if (loading) {
 		return (

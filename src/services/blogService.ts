@@ -61,10 +61,6 @@ export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
 	}
 };
 
-// 公開済みブログのみを取得（一般ユーザー向け）
-// 存在するブログ = 公開済み（削除は物理削除）
-export const getPublishedBlogs = getAllBlogs;
-
 export const getBlogById = async (
 	blogId: string
 ): Promise<FirestoreBlogData | null> => {

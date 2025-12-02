@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Home.css";
 import { useState, useRef, useMemo } from "react";
-import { usePublishedBlogs } from "../hooks/usePublishedBlogs";
+import { useBlogs } from "../hooks/useBlogs";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
@@ -16,7 +16,7 @@ const Home = () => {
 	} | null>(null);
 
 	// ブログデータの取得
-	const { blogs: rawBlogs, loading: blogsLoading } = usePublishedBlogs();
+	const { blogs: rawBlogs, loading: blogsLoading } = useBlogs();
 
 	// 日付でソートしたブログリスト
 	const blogs = useMemo(() => {
