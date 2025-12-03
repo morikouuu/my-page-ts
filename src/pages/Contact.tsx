@@ -3,6 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import "./Contact.css";
 
+import emailjs from "emailjs-com";
+
 type ContactFormData = {
 	name: string;
 	email: string;
@@ -29,18 +31,14 @@ const Contact = () => {
 	const onSubmit: SubmitHandler<ContactFormData> = async (
 		data: ContactFormData
 	) => {
-		try {
-			await new Promise<void>((resolve, reject) => {
-				const isSuccess = Math.random() < 0.5;
-				if (isSuccess) {
-					console.log("Success", data);
-					resolve();
-				} else {
-					reject(new Error("Failed to submit"));
-				}
-			});
+		const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+		const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+		const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-			alert("送信成功");
+		try {
+			await emailjs.send(serviceId, templateId, data, publicKey);
+
+			console.log("送信成功");
 			handleReset();
 		} catch (error) {
 			console.log("送信に失敗しました。再度お試しください。", error);
