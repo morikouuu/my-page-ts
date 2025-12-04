@@ -26,7 +26,6 @@ const Navbar = ({ isOpen, onToggle, onNavigate }: NavbarProps) => {
 		{ path: "/", label: " Home" },
 		{ path: "/profile", label: " Profile" },
 		{ path: "/blog", label: "Blog" },
-		{ path: "/product", label: "Product" },
 		{ path: "/contact", label: "Contact" },
 	];
 

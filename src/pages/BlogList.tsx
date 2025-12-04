@@ -4,6 +4,7 @@ import { useBlogs } from "../hooks/useBlogs";
 import "./BlogList.css";
 
 const BlogList = () => {
+	window.scrollTo({ top: 0, behavior: "instant" });
 	const { blogs, loading } = useBlogs();
 
 	if (loading) {

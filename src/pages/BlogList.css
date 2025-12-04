@@ -2,8 +2,9 @@
 .blog-list-container {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 2rem;
+
 	min-height: 80vh;
+	padding-top: 48px;
 }
 
 .blog-list-loading {
@@ -111,4 +112,3 @@
 		gap: 1.5rem;
 	}
 }
-

@@ -59,6 +59,7 @@
 .bubble:hover {
 	transform: translate(-50%, -50%) scale(1.1);
 	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+	color: #667eea;
 }
 
 /* ドラッグ中のスタイル */

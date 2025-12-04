@@ -3,6 +3,7 @@ import { useBlog } from "../hooks/useBlog";
 import "./BlogDetail.css";
 
 const BlogDetail = () => {
+	window.scrollTo({ top: 0, behavior: "instant" });
 	const { id } = useParams<{ id: string }>();
 	const { blog, loading, error } = useBlog(id);
 
