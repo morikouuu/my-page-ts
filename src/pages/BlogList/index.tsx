@@ -1,6 +1,8 @@
 // src/pages/BlogList/index.tsx
 import { Link } from "react-router-dom";
 import { useBlogs } from "../../hooks/useBlogs";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./style.css";
 
 const BlogList = () => {
@@ -39,9 +41,10 @@ const BlogList = () => {
 							<div className="blog-list-date">{blog.date}</div>
 							<h2 className="blog-list-title">{blog.title}</h2>
 							<p className="blog-list-excerpt">
-								{blog.content?.substring(0, 150) ||
-									"ブログの内容がここに表示されます..."}
-								{blog.content && blog.content.length > 150 && "..."}
+								<ReactMarkdown remarkPlugins={[remarkGfm]}>
+									{blog.content?.substring(0, 50) ||
+										"ブログの内容がここに表示されます..."}
+								</ReactMarkdown>
 							</p>
 						</Link>
 					))}
@@ -52,4 +55,3 @@ const BlogList = () => {
 };
 
 export default BlogList;
-

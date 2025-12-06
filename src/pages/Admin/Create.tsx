@@ -4,6 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { createBlog } from "../../services/blogService";
 import { useAuth } from "../../hooks/useAuth";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./Create.css";
 
 type BlogFormData = {
@@ -108,7 +110,7 @@ const CreateBlog = () => {
 					rules={{ required: "本文は必須です" }}
 					render={({ field, fieldState }) => (
 						<div className="form-group">
-							<label htmlFor="content">本文（Markdown対応）</label>
+							<label htmlFor="content">本文</label>
 							<div className="form-input">
 								<textarea id="content" {...field} rows={20} />
 								{fieldState.error && (
@@ -116,6 +118,14 @@ const CreateBlog = () => {
 										{fieldState.error.message}
 									</span>
 								)}
+							</div>
+							<div className="markdown-preview">
+								<label htmlFor="markdown-preview">プレビュー</label>
+								<div className="markdown-preview-content">
+									<ReactMarkdown remarkPlugins={[remarkGfm]}>
+										{field.value}
+									</ReactMarkdown>
+								</div>
 							</div>
 						</div>
 					)}
@@ -125,10 +135,7 @@ const CreateBlog = () => {
 					<button type="submit" disabled={!isValid}>
 						投稿
 					</button>
-					<button
-						type="button"
-						onClick={() => navigate("/admin/index")}
-					>
+					<button type="button" onClick={() => navigate("/admin/index")}>
 						キャンセル
 					</button>
 				</div>
@@ -138,4 +145,3 @@ const CreateBlog = () => {
 };
 
 export default CreateBlog;
-

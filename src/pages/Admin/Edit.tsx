@@ -5,6 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { updateBlog, getBlogById } from "../../services/blogService";
 import { useAuth } from "../../hooks/useAuth";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./Edit.css";
 
 type BlogFormData = {
@@ -51,7 +53,9 @@ const EditBlog = () => {
 				});
 			} catch (error) {
 				const errorMessage =
-					error instanceof Error ? error.message : "ブログの読み込みに失敗しました";
+					error instanceof Error
+						? error.message
+						: "ブログの読み込みに失敗しました";
 				alert(`ブログの読み込みに失敗しました: ${errorMessage}`);
 				navigate("/admin/index");
 			}
@@ -154,6 +158,14 @@ const EditBlog = () => {
 									</span>
 								)}
 							</div>
+							<div className="markdown-preview">
+								<label htmlFor="markdown-preview">プレビュー</label>
+								<div className="markdown-preview-content">
+									<ReactMarkdown remarkPlugins={[remarkGfm]}>
+										{field.value}
+									</ReactMarkdown>
+								</div>
+							</div>
 						</div>
 					)}
 				/>
@@ -162,10 +174,7 @@ const EditBlog = () => {
 					<button type="submit" disabled={!isValid}>
 						更新
 					</button>
-					<button
-						type="button"
-						onClick={() => navigate("/admin/index")}
-					>
+					<button type="button" onClick={() => navigate("/admin/index")}>
 						キャンセル
 					</button>
 				</div>
@@ -175,4 +184,3 @@ const EditBlog = () => {
 };
 
 export default EditBlog;
-

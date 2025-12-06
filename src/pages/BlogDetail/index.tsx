@@ -1,6 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { useBlog } from "../../hooks/useBlog";
 import "./style.css";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const BlogDetail = () => {
 	window.scrollTo({ top: 0, behavior: "instant" });
@@ -41,19 +43,14 @@ const BlogDetail = () => {
 					<div className="blog-detail-date">{blog.date}</div>
 				</div>
 				<h1 className="blog-detail-title">{blog.title}</h1>
-				<div
-					className="blog-detail-body"
-					dangerouslySetInnerHTML={{
-						__html: blog.content
-							.split("\n")
-							.map((line) => `<p>${line}</p>`)
-							.join(""),
-					}}
-				/>
+				<div className="blog-datail-content">
+					<ReactMarkdown remarkPlugins={[remarkGfm]}>
+						{blog.content}
+					</ReactMarkdown>
+				</div>
 			</article>
 		</div>
 	);
 };
 
 export default BlogDetail;
-
