@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./Profile.css";
+import "./style.css";
 
 const Profile = () => {
 	window.scrollTo({ top: 0, behavior: "instant" });
@@ -35,3 +35,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import "./Contact.css";
+import "./style.css";
 
 import emailjs from "emailjs-com";
 
@@ -12,6 +12,7 @@ type ContactFormData = {
 };
 
 const Contact = () => {
+	window.scrollTo({top: 0, behavior: "instant"});
 	const defaultValues: ContactFormData = {
 		name: "",
 		email: "",
@@ -167,3 +168,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

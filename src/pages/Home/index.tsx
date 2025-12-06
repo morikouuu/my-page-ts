@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import "./Home.css";
+import "./style.css";
 import { useState, useRef, useMemo } from "react";
-import { useBlogs } from "../hooks/useBlogs";
+import { useBlogs } from "../../hooks/useBlogs";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
@@ -377,3 +377,4 @@ const Home = () => {
 };
 
 export default Home;
+

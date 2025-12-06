@@ -1,7 +1,7 @@
-// src/pages/BlogList.tsx
+// src/pages/BlogList/index.tsx
 import { Link } from "react-router-dom";
-import { useBlogs } from "../hooks/useBlogs";
-import "./BlogList.css";
+import { useBlogs } from "../../hooks/useBlogs";
+import "./style.css";
 
 const BlogList = () => {
 	window.scrollTo({ top: 0, behavior: "instant" });
@@ -52,3 +52,4 @@ const BlogList = () => {
 };
 
 export default BlogList;
+

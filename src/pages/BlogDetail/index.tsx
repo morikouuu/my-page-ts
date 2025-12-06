@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { useBlog } from "../hooks/useBlog";
-import "./BlogDetail.css";
+import { useBlog } from "../../hooks/useBlog";
+import "./style.css";
 
 const BlogDetail = () => {
 	window.scrollTo({ top: 0, behavior: "instant" });
@@ -56,3 +56,4 @@ const BlogDetail = () => {
 };
 
 export default BlogDetail;
+
