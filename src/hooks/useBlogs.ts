@@ -3,17 +3,15 @@ import { useState, useEffect } from "react";
 import { getAllBlogs, convertToBlogData } from "../services/blogService";
 import type { BlogData } from "../types/type";
 
-/**
- * 一般ユーザー向けブログ取得Hook（自動読み込み）
- */
 export const useBlogs = () => {
 	const [blogs, setBlogs] = useState<BlogData[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		const loadBlogs = async () => {
 			try {
+				setIsLoading(true);
 				const blogList = await getAllBlogs();
 				// FirestoreBlogDataをBlogDataに変換
 				const convertedBlogs: BlogData[] = blogList.map(convertToBlogData);
@@ -24,12 +22,12 @@ export const useBlogs = () => {
 				setError(errorMessage);
 				console.error("ブログの取得に失敗しました:", err);
 			} finally {
-				setLoading(false);
+				setIsLoading(false);
 			}
 		};
 
 		loadBlogs();
 	}, []);
 
-	return { blogs, loading, error };
+	return { blogs, isLoading, error };
 };

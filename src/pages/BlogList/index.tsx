@@ -7,9 +7,9 @@ import "./style.css";
 
 const BlogList = () => {
 	window.scrollTo({ top: 0, behavior: "instant" });
-	const { blogs, loading } = useBlogs();
+	const { blogs, isLoading } = useBlogs();
 
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className="blog-list-container">
 				<div className="blog-list-loading">読み込み中...</div>

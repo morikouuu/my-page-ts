@@ -2,6 +2,8 @@ import {
 	collection,
 	doc,
 	getDocs,
+	query,
+	orderBy,
 	getDoc,
 	addDoc,
 	updateDoc,
@@ -43,9 +45,10 @@ export const convertToBlogData = (
 export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
 	try {
 		const blogsRef = collection(db, "blogs");
-		const snapshot = await getDocs(blogsRef);
+		const q = query(blogsRef, orderBy("createdAt", "desc"));
+		const snapshot = await getDocs(q);
 		return snapshot.docs.map((doc) => {
-			const data = doc.data();
+			const data: FirestoreBlogData = doc.data() as FirestoreBlogData;
 			return {
 				id: doc.id,
 				createdAt: data.createdAt,
