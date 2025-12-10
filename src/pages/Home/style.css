@@ -239,44 +239,103 @@
 	margin-bottom: 32px;
 }
 
-.blog-card {
-	background: white;
-	border-radius: 16px;
-	padding: 32px;
-	text-decoration: none;
-	color: inherit;
-	transition: all 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+/* Blog用 Embla カルーセル */
+.embla-blog {
+	max-width: 700px;
+	margin: 0 auto;
+	position: relative;
 }
 
-.blog-card:hover {
+.embla-blog .embla__viewport {
+	overflow: hidden;
+}
+
+.embla-blog .embla__container {
+	display: flex;
+}
+
+.embla-blog .embla__slide {
+	flex: 0 0 100%;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 16px;
+	box-sizing: border-box;
+}
+
+.embla-blog .blog-card {
+	width: 100%;
+	max-width: 600px;
+	height: auto;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 16px;
+	padding: 48px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+	transition: all 0.3s ease;
+	text-decoration: none;
+	color: inherit;
+	display: block;
+	box-sizing: border-box;
+}
+
+.embla-blog .blog-card:hover {
 	transform: translateY(-4px);
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.blog-date {
-	font-size: 14px;
-	color: #94a3b8;
-	font-weight: 500;
-}
-
-.blog-title {
-	font-size: 24px;
-	font-weight: 700;
-	color: #1e293b;
-	margin: 0;
-}
-
-.blog-excerpt {
-	font-size: 16px;
-	line-height: 1.6;
+.embla-blog .blog-date {
+	font-size: 0.875rem;
 	color: #64748b;
+	margin-bottom: 16px;
+}
+
+.embla-blog .blog-title {
+	font-size: 1.75rem;
+	font-weight: 600;
+	color: #1e293b;
+	margin: 0 0 16px 0;
+	line-height: 1.4;
+}
+
+.embla-blog .blog-excerpt {
+	font-size: 1rem;
+	color: #64748b;
+	line-height: 1.6;
 	margin: 0;
 }
 
+/* Blog用ナビゲーションボタン - カード左下に配置 */
+.embla-blog .embla__button {
+	position: static;
+	transform: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 2px solid #007bff;
+	background: white;
+	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.embla-blog .embla__button:hover {
+	background: #007bff;
+	color: white;
+	transform: none;
+}
+
+/* ボタンコンテナ - 左下に横並び */
+.embla-blog-controls {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	margin-top: 1.5rem;
+	width: 100%;
+}
 /* プロダクトセクション */
 .product-section {
 	background: #ffffff;
@@ -408,6 +467,23 @@
 		grid-template-columns: 1fr;
 	}
 
+	.embla-blog {
+		max-width: 100%;
+	}
+
+	.embla-blog .embla__slide {
+		padding: 0 16px;
+	}
+
+	.embla-blog .blog-card {
+		max-width: 100%;
+		padding: 32px;
+	}
+
+	.embla-blog .blog-title {
+		font-size: 1.5rem;
+	}
+
 	.contact-card {
 		padding: 32px;
 	}
@@ -433,5 +509,22 @@
 	.bubble-product,
 	.bubble-blog {
 		font-size: 12px;
+	}
+
+	.embla-blog .embla__slide {
+		padding: 0 8px;
+	}
+
+	.embla-blog .blog-card {
+		max-width: 100%;
+		padding: 24px;
+	}
+
+	.embla-blog .blog-title {
+		font-size: 1.25rem;
+	}
+
+	.embla-blog .blog-excerpt {
+		font-size: 0.875rem;
 	}
 }

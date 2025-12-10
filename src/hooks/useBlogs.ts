@@ -5,7 +5,7 @@ import type { BlogData } from "../types/type";
 
 export const useBlogs = () => {
 	const [blogs, setBlogs] = useState<BlogData[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {

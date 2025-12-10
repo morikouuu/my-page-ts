@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import "./style.css";
 import { useState, useRef, useMemo } from "react";
 import { useBlogs } from "../../hooks/useBlogs";
+import useEmblaCarousel from "embla-carousel-react";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
@@ -16,16 +17,22 @@ const Home = () => {
 	} | null>(null);
 
 	// ブログデータの取得
-	const { blogs: rawBlogs, loading: blogsLoading } = useBlogs();
+	const { blogs: rawBlogs, isLoading: blogsLoading } = useBlogs();
+	const [emblaRef, emblaApi] = useEmblaCarousel({
+		loop: true,
+	});
 
-	// 日付でソートしたブログリスト
-	const blogs = useMemo(() => {
-		return [...rawBlogs].sort((a, b) => {
-			const dateA = new Date(a.date || a.createdAt || "").getTime();
-			const dateB = new Date(b.date || b.createdAt || "").getTime();
-			return dateB - dateA;
-		});
-	}, [rawBlogs]);
+	const handleNext = () => {
+		if (!emblaApi) return;
+		console.log("next");
+		emblaApi.scrollNext();
+	};
+
+	const handlePrev = () => {
+		if (!emblaApi) return;
+		console.log("prev");
+		emblaApi.scrollPrev();
+	};
 
 	const snsBubbles = [
 		{
@@ -50,8 +57,9 @@ const Home = () => {
 		{ id: 3, x: 45, y: 70, label: null, link: null },
 	];
 
+	// ブログデータの取得
+
 	// 最新3件のブログ
-	const latestBlogs = useMemo(() => blogs.slice(0, 3), [blogs]);
 
 	const blogBubbles = useMemo(() => {
 		const bubbles: Array<{
@@ -62,36 +70,38 @@ const Home = () => {
 			y: number;
 		}> = [];
 
-		if (latestBlogs[0]) {
+		const latest3 = rawBlogs.slice(0, 3);
+
+		if (latest3[0]) {
 			bubbles.push({
-				id: latestBlogs[0].id,
-				title: latestBlogs[0].title || "",
-				link: latestBlogs[0].link || `/blog/${latestBlogs[0].id}`,
+				id: latest3[0].id,
+				title: latest3[0].title || "",
+				link: latest3[0].link || `/blog/${latest3[0].id}`,
 				x: 25,
 				y: 40,
 			});
 		}
-		if (latestBlogs[1]) {
+		if (latest3[1]) {
 			bubbles.push({
-				id: latestBlogs[1].id,
-				title: latestBlogs[1].title || "",
-				link: latestBlogs[1].link || `/blog/${latestBlogs[1].id}`,
+				id: latest3[1].id,
+				title: latest3[1].title || "",
+				link: latest3[1].link || `/blog/${latest3[1].id}`,
 				x: 50,
 				y: 60,
 			});
 		}
-		if (latestBlogs[2]) {
+		if (latest3[2]) {
 			bubbles.push({
-				id: latestBlogs[2].id,
-				title: latestBlogs[2].title || "",
-				link: latestBlogs[2].link || `/blog/${latestBlogs[2].id}`,
+				id: latest3[2].id,
+				title: latest3[2].title || "",
+				link: latest3[2].link || `/blog/${latest3[2].id}`,
 				x: 75,
 				y: 30,
 			});
 		}
 
 		return bubbles;
-	}, [latestBlogs]);
+	}, [rawBlogs]);
 	// バブルの位置を取得する関数
 	const getBubblePosition = (
 		bubbleId: string,
@@ -292,73 +302,56 @@ const Home = () => {
 			</section>
 
 			{/* ブログセクション */}
+			{/* ブログセクション */}
 			<section id="blog" className="blog-section">
 				<div className="section-content">
 					<h2 className="section-title">Blog</h2>
 					{blogsLoading ? (
-						<div style={{ textAlign: "center", padding: "2rem" }}>
-							読み込み中...
-						</div>
+						<div className="blog-loading">読み込み中...</div>
 					) : (
-						<>
-							<div className="blog-grid">
-								{latestBlogs.length > 0 ? (
-									latestBlogs.map((blog) => (
-										<Link
-											key={blog.id}
-											to={blog.link || `/blog/${blog.id}`}
-											className="blog-card"
-										>
-											<div className="blog-date">{blog.date}</div>
-											<h3 className="blog-title">{blog.title}</h3>
-											<p className="blog-excerpt">
-												{blog.content?.substring(0, 100) ||
-													"ブログの内容がここに表示されます..."}
-											</p>
-										</Link>
-									))
-								) : (
-									<div style={{ textAlign: "center", padding: "2rem" }}>
-										ブログがありません
-									</div>
-								)}
+						<div className="embla embla-blog">
+							<div className="embla__viewport" ref={emblaRef}>
+								<div className="embla__container">
+									{rawBlogs.slice(0, 5).map((blog) => (
+										<div className="embla__slide" key={blog.id}>
+											<Link
+												to={blog.link || `/blog/${blog.id}`}
+												className="blog-card"
+											>
+												<div className="blog-date">{blog.date}</div>
+												<h3 className="blog-title">{blog.title}</h3>
+												<p className="blog-excerpt">
+													{blog.content?.substring(0, 100) ||
+														"ブログの内容がここに表示されます..."}
+												</p>
+											</Link>
+										</div>
+									))}
+								</div>
 							</div>
-							{latestBlogs.length > 0 && (
-								<Link to="/blog" className="section-link">
-									すべてのブログを見る →
-								</Link>
-							)}
-						</>
+
+							{/* ボタンを左下に横並び配置 */}
+							<div className="embla-blog-controls">
+								<button
+									className="embla__button embla__button--prev"
+									onClick={() => handlePrev()}
+								>
+									◀
+								</button>
+
+								<button
+									className="embla__button embla__button--next"
+									onClick={() => handleNext()}
+								>
+									▶
+								</button>
+							</div>
+						</div>
 					)}
 				</div>
 			</section>
 
-			{/* プロダクトセクション */}
-			<section id="product" className="product-section">
-				<div className="section-content">
-					<h2 className="section-title">Product</h2>
-					<div className="product-grid">
-						{productBubbles.map((product) =>
-							product.label ? (
-								<Link
-									key={product.id}
-									to={product.link || ""}
-									className="product-card"
-								>
-									<div className="product-placeholder">{product.label}</div>
-								</Link>
-							) : (
-								<div
-									key={product.id}
-									className="product-card product-card-empty"
-								>
-									<div className="product-placeholder">Coming Soon</div>
-								</div>
-							)
-						)}
-					</div>
-				</div>
-			</section>
+			{/* お問い合わせセクション */}
 			<section id="contact" className="contact-section">
 				<div className="section-content">
 					<h2 className="section-title">Contact</h2>
@@ -377,4 +370,3 @@ const Home = () => {
 };
 
 export default Home;
-

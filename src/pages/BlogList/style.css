@@ -89,6 +89,7 @@
 	flex-shrink: 0;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
+	line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -102,70 +103,12 @@
 	overflow: hidden;
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
+	line-clamp: 4;
 	-webkit-box-orient: vertical;
 	text-overflow: ellipsis;
 }
 
 /* マークダウンのスタイル調整（プレビュー用） */
-.blog-list-excerpt p {
-	margin: 0;
-	display: -webkit-box;
-	-webkit-line-clamp: 4;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.blog-list-excerpt h1,
-.blog-list-excerpt h2,
-.blog-list-excerpt h3,
-.blog-list-excerpt h4,
-.blog-list-excerpt h5,
-.blog-list-excerpt h6 {
-	margin: 0 0 0.5rem 0;
-	font-size: inherit;
-	font-weight: 600;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.blog-list-excerpt code {
-	background-color: #f1f5f9;
-	padding: 0.2rem 0.4rem;
-	border-radius: 4px;
-	font-size: 0.9em;
-}
-
-.blog-list-excerpt pre {
-	background-color: #f1f5f9;
-	padding: 0.5rem;
-	border-radius: 4px;
-	margin: 0.5rem 0;
-	overflow-x: auto;
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.blog-list-excerpt ul,
-.blog-list-excerpt ol {
-	margin: 0.5rem 0;
-	padding-left: 1.5rem;
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.blog-list-excerpt li {
-	margin: 0.25rem 0;
-}
 
 @media (max-width: 768px) {
 	.blog-list-container {
