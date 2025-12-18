@@ -17,7 +17,6 @@ const Navbar = ({ isOpen, onToggle, onNavigate }: NavbarProps) => {
 		{ id: "bubble-area", label: "Home" },
 		{ id: "profile", label: "Profile" },
 		{ id: "blog", label: "Blog" },
-		{ id: "product", label: "Product" },
 		{ id: "contact", label: "Contact" },
 	];
 
