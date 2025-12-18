@@ -54,7 +54,41 @@
 
 .profile-info-container {
 	max-width: 700px;
-	text-align: center;
+	width: 100%; /* 幅を確保 */
+}
+
+/* ▼ 新しく追加するクラス ▼ */
+.profile-text-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	text-align: left;
+}
+
+.profile-text {
+	font-size: 16px;
+	line-height: 2;
+	letter-spacing: 0.05em;
+	color: #475569;
+	margin: 0;
+	font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
+		"Hiragino Sans", Meiryo, sans-serif; /* 読みやすいフォント指定 */
+}
+
+/* 強調部分（strongタグ）のデザイン */
+.profile-text strong {
+	color: #764ba2;
+	background: linear-gradient(transparent 70%, #e0d4fc 70%);
+	font-weight: 700;
+}
+
+/* スマホ表示時の調整 */
+@media (max-width: 768px) {
+	.profile-text {
+		font-size: 15px;
+		line-height: 1.8;
+		text-align: left; /* スマホでも左揃え推奨 */
+	}
 }
 
 .description {

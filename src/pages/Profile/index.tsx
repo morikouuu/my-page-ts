@@ -20,16 +20,19 @@ const Profile = () => {
 						className="profile-image"
 					/>
 				</div>
-				<div className="profile-info-container">
-					<p className="description">
-						初めまして。私は作ったものが形になりることが楽しくてコーディングを始めました。
+				<div className="profile-text-wrapper">
+					<p className="profile-text">
+						初めまして。私は「作ったものが形になること」が楽しくてコーディングを始めました。
 						<br />
 						まだまだ作品は少ないのですが、少しずつ自分らしいポートフォリオに育てていけたらと思っています。
-						<br />
-						今はreactを学んでいます。またmobileアプリの開発もしています。
-						将来はフロントエンドエンジニアとして働きたいと思っています。
-						<br />
-						「ずっと真夜中でいいのに」が好きでこのページもずとまよのホームページを一部参考にして作りました。
+					</p>
+					<p className="profile-text">
+						現在は <strong>React</strong> を中心に学習中で、
+						<strong>モバイルアプリの開発</strong>にも挑戦しています。
+						将来はフロントエンドエンジニアとして働くことが目標です。
+					</p>
+					<p className="profile-text">
+						「ずっと真夜中でいいのに。」が好きで、このページもずとまよのHPを一部参考にして作成しました。
 					</p>
 				</div>
 			</div>
