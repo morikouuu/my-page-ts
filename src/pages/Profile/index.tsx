@@ -23,9 +23,12 @@ const Profile = () => {
 				<div className="profile-info-container">
 					<p className="description">
 						初めまして。私は作ったものが形になりることが楽しくてコーディングを始めました。
+						<br />
 						まだまだ作品は少ないのですが、少しずつ自分らしいポートフォリオに育てていけたらと思っています。
+						<br />
 						今はreactを学んでいます。またmobileアプリの開発もしています。
 						将来はフロントエンドエンジニアとして働きたいと思っています。
+						<br />
 						「ずっと真夜中でいいのに」が好きでこのページもずとまよのホームページを一部参考にして作りました。
 					</p>
 				</div>
@@ -35,4 +38,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

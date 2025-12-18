@@ -3,6 +3,7 @@ import "./style.css";
 import { useState, useRef, useMemo } from "react";
 import { useBlogs } from "../../hooks/useBlogs";
 import useEmblaCarousel from "embla-carousel-react";
+import { Github, Twitter } from "lucide-react";
 
 const Home = () => {
 	const [bubblePositions, setBubblePositions] = useState<{
@@ -39,14 +40,14 @@ const Home = () => {
 			id: 1,
 			x: 50,
 			y: 80,
-			label: "Github",
+			icon: <Github size={48} />,
 			link: "https://github.com/morikouuu",
 		},
 		{
 			id: 2,
 			x: 25,
 			y: 80,
-			label: "X",
+			icon: <Twitter size={48} />,
 			link: "https://x.com/ilike_lamb?t=Lmu7FrE60JIyM9wmEbS1fA&s=09",
 		},
 	];
@@ -56,10 +57,6 @@ const Home = () => {
 		{ id: 2, x: 90, y: 20, label: null, link: null },
 		{ id: 3, x: 45, y: 70, label: null, link: null },
 	];
-
-	// ブログデータの取得
-
-	// 最新3件のブログ
 
 	const blogBubbles = useMemo(() => {
 		const bubbles: Array<{
@@ -212,7 +209,7 @@ const Home = () => {
 							}}
 							onMouseDown={(e) => handleMouseDown(e, bubbleId)}
 						>
-							{sns.label}
+							{sns.icon}
 						</a>
 					);
 				})}
@@ -300,12 +297,11 @@ const Home = () => {
 					</div>
 				</div>
 			</section>
-
-			{/* ブログセクション */}
 			{/* ブログセクション */}
 			<section id="blog" className="blog-section">
 				<div className="section-content">
 					<h2 className="section-title">Blog</h2>
+
 					{blogsLoading ? (
 						<div className="blog-loading">読み込み中...</div>
 					) : (

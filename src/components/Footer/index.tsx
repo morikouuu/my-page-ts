@@ -1,4 +1,5 @@
 import "./style.css";
+import { Github, Twitter } from "lucide-react";
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
@@ -10,8 +11,12 @@ const Footer = () => {
 					© {currentYear} morikouuu. All rights reserved.
 				</p>
 				<div className="footer-links">
-					<a href="https://github.com/morikouuu">Github</a>
-					<a href="https://x.com/ilike_lamb?t=Lmu7FrE60JIyM9wmEbS1fA&s=09">X</a>
+					<a href="https://github.com/morikouuu">
+						<Github size={24} />
+					</a>
+					<a href="https://x.com/ilike_lamb?t=Lmu7FrE60JIyM9wmEbS1fA&s=09">
+						<Twitter size={24} />
+					</a>
 				</div>
 			</div>
 		</footer>

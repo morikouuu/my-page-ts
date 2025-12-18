@@ -1,8 +1,8 @@
 /* Navbarボタン - 右上に四角いボタンとして配置 */
 .navbar-btn {
 	position: fixed;
-	top: 1.5rem;
-	right: 1.5rem;
+	top: 24px;
+	right: 24px;
 	z-index: 1000;
 	width: 48px;
 	height: 48px;
@@ -59,15 +59,15 @@
 .menu-nav {
 	display: flex;
 	flex-direction: column;
-	padding: 5rem 2rem 2rem;
-	gap: 1rem;
+	padding: 80px 32px 32px;
+	gap: 16px;
 }
 
 .menu-item {
 	background: none;
 	border: none;
-	padding: 1rem 1.5rem;
-	font-size: 1.125rem;
+	padding: 16px 24px;
+	font-size: 18px;
 	font-weight: 500;
 	color: #1e293b;
 	cursor: pointer;
@@ -109,8 +109,8 @@
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
 	.navbar-btn {
-		top: 1rem;
-		right: 1rem;
+		top: 16px;
+		right: 16px;
 		width: 44px;
 		height: 44px;
 	}
@@ -120,19 +120,19 @@
 	}
 
 	.menu-nav {
-		padding: 4rem 1.5rem 2rem;
+		padding: 64px 24px 32px;
 	}
 
 	.menu-item {
-		font-size: 1rem;
-		padding: 0.875rem 1.25rem;
+		font-size: 16px;
+		padding: 14px 20px;
 	}
 }
 
 @media (max-width: 480px) {
 	.navbar-btn {
-		top: 0.75rem;
-		right: 0.75rem;
+		top: 12px;
+		right: 12px;
 		width: 40px;
 		height: 40px;
 	}
