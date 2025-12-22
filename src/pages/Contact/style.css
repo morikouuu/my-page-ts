@@ -197,3 +197,33 @@
 		font-size: 16px;
 	}
 }
+
+.submit-success {
+	background: #d1fae5;
+	color: #065f46;
+	padding: 16px;
+	border-radius: 8px;
+	margin-bottom: 24px;
+	border: 1px solid #6ee7b7;
+}
+
+.submit-error {
+	background: #fee2e2;
+	color: #991b1b;
+	padding: 16px;
+	border-radius: 8px;
+	margin-bottom: 24px;
+	border: 1px solid #fca5a5;
+}
+
+.character-count {
+	font-size: 12px;
+	color: #94a3b8;
+	text-align: right;
+	margin-top: 4px;
+}
+
+.form-input input:invalid,
+.form-input textarea:invalid {
+	border-color: #ef4444;
+}

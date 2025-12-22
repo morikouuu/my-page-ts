@@ -15,7 +15,7 @@ export type BubbleData = {
 	link: string;
 };
 
-export type BubbleType = "blog" | "sns" | "product";
+
 
 // SNS関連の型
 export type SnsData = {

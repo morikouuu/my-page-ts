@@ -59,7 +59,7 @@ export const getAllBlogs = async (): Promise<FirestoreBlogData[]> => {
 			};
 		});
 	} catch (error) {
-		console.error("Error fetching blogs:", error);
+		console.error("ブログの取得に失敗しました:", error);
 		throw error;
 	}
 };
@@ -85,7 +85,7 @@ export const getBlogById = async (
 			authorId: data.authorId || "",
 		};
 	} catch (error) {
-		console.error("Error fetching blog:", error);
+		console.error("ブログの取得に失敗しました:", error);
 		throw error;
 	}
 };
